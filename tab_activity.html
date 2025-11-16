@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tab Activity → Flask</title>
+  <script src="https://openfpcdn.io/fingerprintjs/v3/umd.min.js"></script>
+</head>
+<body>
+  <h2>Tab Activity Test</h2>
+  <p>Check Server Flask terminal - the scirpt runs FingerprintJS library and sends back client info on tab activity </p>
+  <p>Assigns you a client ID, to track. Update your tab activity: page_load, tab_active, tab_inactive, tab_closed</p>
+
+  <script>
+    let visitorId = "unknown";
+    FingerprintJS.load().then(fp => fp.get()).then(r => {
+      visitorId = r.visitorId;
+      log('page_load');
+    });
+
+    function log(event) {
+      fetch('/tab-activity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ visitorId, event }),
+        keepalive: true
+      });
+    }
+
+    window.addEventListener('visibilitychange', () => {
+      log(document.hidden ? 'tab_inactive' : 'tab_active');
+    });
+
+    window.addEventListener('beforeunload', () => log('tab_closed'));
+  </script>
+</body>
+</html>

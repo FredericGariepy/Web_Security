@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fingerprint → Flask</title>
+  <!-- CORRECT UMD BUILD -->
+  <script src="https://openfpcdn.io/fingerprintjs/v3/umd.min.js"></script>
+</head>
+<body>
+  <h2>Fingerprint Test</h2>
+  <p>Check **server terminal** for fingerprint.</p>
+  <p>Check web-brosswer console log for fingerprint ID.</p>
+  <p>This page uses FingerprintJS to send client info to the server</p>
+  
+  <script>
+    // FingerprintJS is globally available
+    FingerprintJS.load()
+      .then(fp => fp.get())
+      .then(result => {
+        const payload = {
+          visitorId: result.visitorId,
+          components: result.components
+        };
+        console.log('Fingerprint ID:', payload.visitorId);
+
+        // Send to Server Flask
+        fetch('/client_side_fingerprint_log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(r => r.json())
+        .then(resp => console.log('Server:', resp))
+        .catch(err => console.error('Send failed:', err));
+      })
+      .catch(err => console.error('FingerprintJS failed:', err));
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Routes</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background: #f0f0f0; }
+        a { color: #0066cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+	
+<p>This Flask server acts as a hands-on environment for learning/praticing web security testing. </p>
+Add Vulnerable Routes
+
+
+   <h1>Available Routes (Auto-Generated)</h1>
+    <table>
+        <tr>
+            <th>URL</th>
+            <th>Methods</th>
+            <th>Endpoint</th>
+        </tr>
+        {% for r in routes %}
+        <tr>
+            <td><a href="{{ r.url }}" target="_blank">{{ r.url }}</a></td>
+            <td>{{ r.methods }}</td>
+            <td><code>{{ r.endpoint }}</code></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><small><strong>have fun.</strong></small></p>
+</body>
+</html>
